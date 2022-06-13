@@ -17,17 +17,21 @@ import {
   AppCurrentSubject,
   AppConversionRates,
 } from '../sections/@dashboard/app';
+import { useProfileQuery } from 'src/app/appApi';
 
 // ----------------------------------------------------------------------
 
 export default function DashboardApp() {
   const theme = useTheme();
-
+  const { data } = useProfileQuery();
   return (
     <Page title="Dashboard">
       <Container maxWidth="xl">
         <Typography variant="h4" sx={{ mb: 5 }}>
-          Hi, Welcome back
+          <span style={{ opacity: .7 }}>
+            Hi, Welcome back &nbsp;
+          </span>
+          {data && data?.name}
         </Typography>
 
         <Grid container spacing={3}>

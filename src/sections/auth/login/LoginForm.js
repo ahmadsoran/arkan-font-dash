@@ -1,43 +1,59 @@
 import * as Yup from 'yup';
-import { useState } from 'react';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useLoginUserMutation } from 'src/app/appApi';
+import { useNavigate } from 'react-router-dom';
 import { useFormik, Form, FormikProvider } from 'formik';
 // material
-import { Link, Stack, Checkbox, TextField, IconButton, InputAdornment, FormControlLabel } from '@mui/material';
+import { Stack, TextField, IconButton, InputAdornment } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // component
 import Iconify from '../../../components/Iconify';
+import { useDispatch } from 'react-redux';
+import { setToken } from 'src/feature/tokenSlice';
 
 // ----------------------------------------------------------------------
 
 export default function LoginForm() {
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
-
+  const [LoginIntoAccount, { isSuccess, isError, isLoading, data }] = useLoginUserMutation()
   const LoginSchema = Yup.object().shape({
-    email: Yup.string().email('Email must be a valid email address').required('Email is required'),
+    username: Yup.string().required('username must be a valid username ').required('username is required'),
     password: Yup.string().required('Password is required'),
   });
 
   const formik = useFormik({
     initialValues: {
-      email: '',
+      username: '',
       password: '',
-      remember: true,
     },
     validationSchema: LoginSchema,
     onSubmit: () => {
-      navigate('/dashboard', { replace: true });
+      LoginIntoAccount({
+
+        username: formik.values.username,
+        password: formik.values.password,
+
+      }).unwrap()
+
     },
   });
-
-  const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps } = formik;
+  const { errors, touched, handleSubmit, getFieldProps } = formik;
 
   const handleShowPassword = () => {
     setShowPassword((show) => !show);
   };
+  useEffect(() => {
+    if (data) {
+      console.log(data)
+      dispatch(setToken(data))
 
+      if (isSuccess) {
+        window.location.href = '/dashboard/app';
+      }
+    }
+  }, [data]) // eslint-disable-line react-hooks/exhaustive-deps
   return (
     <FormikProvider value={formik}>
       <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
@@ -45,11 +61,11 @@ export default function LoginForm() {
           <TextField
             fullWidth
             autoComplete="username"
-            type="email"
-            label="Email address"
-            {...getFieldProps('email')}
-            error={Boolean(touched.email && errors.email)}
-            helperText={touched.email && errors.email}
+            type="username"
+            label="username"
+            {...getFieldProps('username')}
+            error={Boolean(touched.username && errors.username) || isError}
+            helperText={touched.username && errors.username}
           />
 
           <TextField
@@ -67,26 +83,15 @@ export default function LoginForm() {
                 </InputAdornment>
               ),
             }}
-            error={Boolean(touched.password && errors.password)}
+            error={Boolean(touched.password && errors.password) || isError}
             helperText={touched.password && errors.password}
           />
         </Stack>
 
-        <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}>
-          <FormControlLabel
-            control={<Checkbox {...getFieldProps('remember')} checked={values.remember} />}
-            label="Remember me"
-          />
-
-          <Link component={RouterLink} variant="subtitle2" to="#" underline="hover">
-            Forgot password?
-          </Link>
-        </Stack>
-
-        <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isSubmitting}>
+        <LoadingButton fullWidth sx={{ mt: 5 }} size="large" type="submit" variant="contained" loading={isLoading}>
           Login
         </LoadingButton>
       </Form>
-    </FormikProvider>
+    </FormikProvider >
   );
 }

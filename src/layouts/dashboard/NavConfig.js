@@ -15,6 +15,7 @@ const navConfig = [
     title: 'user',
     path: '/dashboard/user',
     icon: getIcon('eva:people-fill'),
+    role: ['admin', 'dev', 'moderator'],
   },
   {
     title: 'product',

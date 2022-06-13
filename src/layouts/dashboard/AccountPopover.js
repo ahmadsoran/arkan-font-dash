@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 // @mui
 import { alpha } from '@mui/material/styles';
 import { Box, Divider, Typography, Stack, MenuItem, Avatar, IconButton } from '@mui/material';
@@ -7,6 +7,9 @@ import { Box, Divider, Typography, Stack, MenuItem, Avatar, IconButton } from '@
 import MenuPopover from '../../components/MenuPopover';
 // mocks_
 import account from '../../_mock/account';
+import { useProfileQuery } from 'src/app/appApi';
+import { removeToken } from 'src/feature/tokenSlice';
+import { useDispatch } from 'react-redux';
 
 // ----------------------------------------------------------------------
 
@@ -34,15 +37,21 @@ export default function AccountPopover() {
   const anchorRef = useRef(null);
 
   const [open, setOpen] = useState(null);
-
+  const { data } = useProfileQuery()
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
   const handleOpen = (event) => {
     setOpen(event.currentTarget);
   };
 
+  const handleLogout = () => {
+    dispatch(removeToken())
+    navigate('/login')
+
+  };
   const handleClose = () => {
     setOpen(null);
   };
-
   return (
     <>
       <IconButton
@@ -63,7 +72,7 @@ export default function AccountPopover() {
           }),
         }}
       >
-        <Avatar src={account.photoURL} alt="photoURL" />
+        <Avatar src={data?.image ? data?.image : account.photoURL} alt="photoURL" />
       </IconButton>
 
       <MenuPopover
@@ -82,10 +91,11 @@ export default function AccountPopover() {
       >
         <Box sx={{ my: 1.5, px: 2.5 }}>
           <Typography variant="subtitle2" noWrap>
-            {account.displayName}
+            {data ? data.username : 'null'}
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-            {account.email}
+            {data ? data.email : 'null'}
+
           </Typography>
         </Box>
 
@@ -101,7 +111,7 @@ export default function AccountPopover() {
 
         <Divider sx={{ borderStyle: 'dashed' }} />
 
-        <MenuItem onClick={handleClose} sx={{ m: 1 }}>
+        <MenuItem onClick={handleLogout} sx={{ m: 1 }}>
           Logout
         </MenuItem>
       </MenuPopover>

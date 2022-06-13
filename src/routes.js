@@ -10,19 +10,22 @@ import NotFound from './pages/Page404';
 import Register from './pages/Register';
 import Products from './pages/Products';
 import DashboardApp from './pages/DashboardApp';
+import { useProfileQuery } from './app/appApi';
 
 // ----------------------------------------------------------------------
 
 export default function Router() {
+  const { data } = useProfileQuery()
   return useRoutes([
     {
+
       path: '/dashboard',
       element: <DashboardLayout />,
       children: [
-        { path: 'app', element: <DashboardApp /> },
-        { path: 'user', element: <User /> },
-        { path: 'products', element: <Products /> },
-        { path: 'blog', element: <Blog /> },
+        { path: 'app', element: data && <DashboardApp /> },
+        { path: 'user', element: data && <User /> },
+        { path: 'products', element: data && <Products /> },
+        { path: 'blog', element: data && <Blog /> },
       ],
     },
     {
@@ -31,7 +34,6 @@ export default function Router() {
       children: [
         { path: '/', element: <Navigate to="/dashboard/app" /> },
         { path: 'login', element: <Login /> },
-        { path: 'register', element: <Register /> },
         { path: '404', element: <NotFound /> },
         { path: '*', element: <Navigate to="/404" /> },
       ],
