@@ -7,10 +7,10 @@ import Blog from './pages/Blog';
 import User from './pages/User';
 import Login from './pages/Login';
 import NotFound from './pages/Page404';
-import Register from './pages/Register';
 import Products from './pages/Products';
 import DashboardApp from './pages/DashboardApp';
 import { useProfileQuery } from './app/appApi';
+import UploadFonts from './components/UploadFonts';
 
 // ----------------------------------------------------------------------
 
@@ -24,8 +24,8 @@ export default function Router() {
       children: [
         { path: 'app', element: data && <DashboardApp /> },
         { path: 'user', element: data && <User /> },
-        { path: 'products', element: data && <Products /> },
-        { path: 'blog', element: data && <Blog /> },
+        { path: 'uploadFonts', element: data && <UploadFonts /> },
+        { path: 'fonts', element: data && <Blog /> },
       ],
     },
     {

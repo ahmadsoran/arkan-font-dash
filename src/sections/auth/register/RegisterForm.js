@@ -20,8 +20,8 @@ export default function RegisterForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [RegisterIntoAccount, { isSuccess, isError, isLoading, error }] = useAddUsersMutation()
   const RegisterSchema = Yup.object().shape({
-    name: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('First name required'),
-    username: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Last name required'),
+    name: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('name required'),
+    username: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('username required'),
     email: Yup.string().email('Email must be a valid email address').required('Email is required'),
     password: Yup.string().required('Password is required'),
     phoneNumber: Yup.number().required('Phone number is required'),

@@ -1,0 +1,157 @@
+import * as Yup from 'yup';
+import { useState } from 'react';
+import { useFormik, Form, FormikProvider } from 'formik';
+// material
+import { Stack, TextField, Grid, Button, Container, Alert, Typography } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
+// component
+import React from 'react'
+import { useUploadFontMutation } from 'src/app/appApi';
+import Page from './Page';
+import { Link } from 'react-router-dom';
+
+// ----------------------------------------------------------------------
+
+export default function UploadFonts() {
+
+    const [FontStyles, setFontStyles] = useState([]);
+    const [ShowAlert, setShowAlert] = useState(false);
+    const RegisterSchema = Yup.object().shape({
+        name: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('name required'),
+        testText: Yup.string().min(2, 'Too Short!').max(100, 'Too Long!'),
+    });
+    const [UploadFont, { isError, isLoading, error, data, isSuccess }] = useUploadFontMutation()
+
+    const formik = useFormik({
+        initialValues: {
+            name: '',
+            testText: '',
+            regularPath: '',
+            regularName: '',
+
+
+        },
+        validationSchema: RegisterSchema,
+        onSubmit: () => {
+            const formData = new FormData();
+            formData.append('name', formik.values.name);
+            formik.values.testText && formData.append('testText', formik.values.testText);
+            formData.append('regular', formik.values.regularPath);
+            FontStyles?.forEach(font => {
+                formData.append('styles', font.file);
+            })
+
+            UploadFont(formData).unwrap()
+
+        },
+    });
+    const { errors, touched, handleSubmit, getFieldProps } = formik;
+    const handleRegularFileChange = (e) => {
+        const regualr = e.target.files[0];
+        formik.setFieldValue('regularPath', regualr ? regualr : '');
+        formik.setFieldValue('regularName', regualr?.name);
+
+    };
+    const handleStylesFileChange = (e) => {
+        const styles = e.target.files[0];
+        setFontStyles([...FontStyles, {
+            name: styles?.name,
+            file: styles,
+        }])
+
+    };
+    React.useEffect(() => {
+        if (isSuccess) {
+            setFontStyles([])
+            formik.resetForm()
+            setShowAlert(true)
+        }
+        if (data?.message) {
+            var timeOutAlert = setTimeout(() => {
+                setShowAlert(false)
+            }, 6000);
+        }
+        return () => {
+            clearTimeout(timeOutAlert)
+        }
+    }, [isSuccess, data])
+
+    return (
+        <>
+            <Page title="Font Upload">
+                <Container sx={{ px: 5 }}>
+                    <FormikProvider value={formik}>
+                        <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
+                            <Stack spacing={3}>
+                                <Button sx={{ position: 'relative', width: '100%', py: 4, backgroundColor: '#3a96ff3b' }}>
+                                    {formik.values.regularName || 'Add Regualr Font '}
+
+                                    <label style={{ position: 'absolute', width: '100%', height: '100%' }} htmlFor="uploadImage">
+                                        <input onChange={handleRegularFileChange} type="file" id="uploadImage" style={{ display: 'none' }} />
+                                    </label>
+
+                                </Button>
+                                <hr style={{ opacity: .5 }} />
+                                <Typography variant="h6" align='center' fontWeight={300}>
+                                    Font Styles ( <span style={{ fontSize: 15 }}>
+                                        Bold , Italic , Bold Italic , 900 ,800 ...etc
+                                    </span>
+                                    )
+                                </Typography>
+                                <Grid container display={'flex'} >
+
+                                    {
+                                        FontStyles?.map((item, index) => {
+                                            return (
+                                                <Button key={index} sx={{ m: 1, position: 'relative', width: 'fit-content', py: 4, backgroundColor: '#3a96ff3b' }}>
+                                                    {item.name}
+                                                </Button>
+                                            )
+                                        })
+
+
+                                    }
+                                    <Button sx={{ position: 'relative', width: 'fit-content', py: 4, backgroundColor: '#f5f9003b' }} color='warning'>
+                                        +
+
+                                        <label style={{ position: 'absolute', width: '100%', height: '100%' }} htmlFor="styleFiles">
+                                            <input onChange={handleStylesFileChange} type="file" id="styleFiles" style={{ display: 'none' }} />
+                                        </label>
+
+                                    </Button>
+                                </Grid>
+                                <hr style={{ opacity: .5 }} />
+
+                                <TextField
+                                    fullWidth
+                                    label="Font Name"
+                                    {...getFieldProps('name')}
+                                    error={Boolean(touched.name && errors.name)}
+                                    helperText={touched.name && errors.name}
+                                />
+
+                                <TextField
+                                    fullWidth
+                                    label="Sample Text"
+                                    rows={5}
+                                    {...getFieldProps('testText')}
+                                    error={Boolean(touched.testText && errors.testText)}
+                                    helperText={touched.testText && errors.testText}
+                                />
+
+                                <p style={{ color: 'darkred', textAlign: 'center' }}>{isError && error?.data?.error}</p>
+                                {
+                                    ShowAlert && <Alert severity="success" color='success'>{data?.message} check it out <Link to='../fonts'>Here</Link></Alert>
+                                }
+
+                                <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isLoading}>
+                                    Upload
+                                </LoadingButton>
+                            </Stack>
+                        </Form>
+                    </FormikProvider>
+                </Container>
+            </Page>
+        </>
+    );
+}

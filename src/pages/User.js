@@ -150,7 +150,7 @@ export default function User() {
                             id="demo-simple-select-required"
                             label="Role *"
                             name='role'
-                            value={EditedRole?.userIdForRole === row._id ? EditedRole.role : !editIsLoading && row.role}
+                            value={EditedRole?.userIdForRole === row._id ? EditedRole.role : !editIsLoading ? row.role : EditedRole.role}
                             onChange={(e) => {
                               setEditedRole({
                                 userIdForRole: row._id,

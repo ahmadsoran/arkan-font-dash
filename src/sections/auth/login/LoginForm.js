@@ -46,7 +46,6 @@ export default function LoginForm() {
   };
   useEffect(() => {
     if (data) {
-      console.log(data)
       dispatch(setToken(data))
 
       if (isSuccess) {

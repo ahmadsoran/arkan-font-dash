@@ -72,6 +72,42 @@ export const appApi = createApi({
 
             })
         }),
+        uploadFont: builder.mutation({
+            query: (FontData) => ({
+                url: "/uploadFont",
+                method: "POST",
+                body: FontData,
+                credentials: 'include',
+
+            })
+        }),
+        getFontsData: builder.query({
+            query: () => ({
+                url: "/getFonts",
+                method: "GET",
+                credentials: 'include',
+            })
+        }),
+
+        deleteFontsById: builder.query({
+            query: (id) => ({
+                url: `/deleteFont?id=${id}`,
+                method: "GET",
+                credentials: 'include',
+            })
+        }),
+
+        visits: builder.query({
+            query: () => '/getVisitors'
+        }),
+        getBugs: builder.query({
+            query: () => '/getReportBugs'
+        }),
+        getLogs: builder.query({
+            query: () => '/logs'
+        }),
+
+
     }),
 })
 
@@ -83,6 +119,12 @@ export const {
     useGetUsersQuery,
     useDeleteByIdMutation,
     useAddUsersMutation,
-    useEditUserRoleMutation
+    useEditUserRoleMutation,
+    useUploadFontMutation,
+    useGetFontsDataQuery,
+    useDeleteFontsByIdQuery,
+    useVisitsQuery,
+    useGetBugsQuery,
+    useGetLogsQuery,
 
 } = appApi

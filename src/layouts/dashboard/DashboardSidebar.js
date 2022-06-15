@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
 import { useEffect } from 'react';
-import { Link as RouterLink, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 // material
 import { styled } from '@mui/material/styles';
-import { Box, Link, Button, Drawer, Typography, Avatar, Stack } from '@mui/material';
+import { Box, Drawer, Typography, Avatar } from '@mui/material';
 // mock
 import account from '../../_mock/account';
 // hooks
@@ -66,22 +66,20 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
       </Box>
 
       <Box sx={{ mb: 5, mx: 2.5 }}>
-        <Link underline="none" component={RouterLink} to="#">
-          <AccountStyle>
-            <Avatar src={data?.image ? data?.image : account.photoURL} alt="photoURL" />
+        <AccountStyle>
+          <Avatar src={data?.image ? data?.image : account.photoURL} alt="photoURL" />
 
-            <Box sx={{ ml: 2 }}>
-              <Typography variant="subtitle2" sx={{ color: 'text.primary' }}>
-                {data ? data.username : 'null'}
+          <Box sx={{ ml: 2 }}>
+            <Typography variant="subtitle2" sx={{ color: 'text.primary' }}>
+              {data ? data.username : 'null'}
 
-              </Typography>
-              <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                {data ? data.role : 'null'}
+            </Typography>
+            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+              {data ? data.role : 'null'}
 
-              </Typography>
-            </Box>
-          </AccountStyle>
-        </Link>
+            </Typography>
+          </Box>
+        </AccountStyle>
       </Box>
 
       <NavSection navConfig={navConfig} />

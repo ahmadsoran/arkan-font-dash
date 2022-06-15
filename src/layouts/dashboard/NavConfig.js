@@ -18,30 +18,18 @@ const navConfig = [
     role: ['admin', 'dev', 'moderator'],
   },
   {
-    title: 'product',
-    path: '/dashboard/products',
-    icon: getIcon('eva:shopping-bag-fill'),
+    title: 'Upload',
+    path: '/dashboard/uploadFonts',
+    icon: getIcon('eva:cloud-upload-outline'),
+    role: ['admin', 'desv', 'moderator'],
+
   },
   {
-    title: 'blog',
-    path: '/dashboard/blog',
-    icon: getIcon('eva:file-text-fill'),
+    title: 'fonts',
+    path: '/dashboard/fonts',
+    icon: getIcon('ant-design:font-colors-outlined'),
   },
-  {
-    title: 'login',
-    path: '/login',
-    icon: getIcon('eva:lock-fill'),
-  },
-  {
-    title: 'register',
-    path: '/register',
-    icon: getIcon('eva:person-add-fill'),
-  },
-  {
-    title: 'Not found',
-    path: '/404',
-    icon: getIcon('eva:alert-triangle-fill'),
-  },
+
 ];
 
 export default navConfig;
