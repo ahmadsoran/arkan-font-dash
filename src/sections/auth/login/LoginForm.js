@@ -1,7 +1,6 @@
 import * as Yup from 'yup';
 import { useEffect, useState } from 'react';
 import { useLoginUserMutation } from 'src/app/appApi';
-import { useNavigate } from 'react-router-dom';
 import { useFormik, Form, FormikProvider } from 'formik';
 // material
 import { Stack, TextField, IconButton, InputAdornment } from '@mui/material';
@@ -14,7 +13,6 @@ import { setToken } from 'src/feature/tokenSlice';
 // ----------------------------------------------------------------------
 
 export default function LoginForm() {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
   const [LoginIntoAccount, { isSuccess, isError, isLoading, data }] = useLoginUserMutation()

@@ -1,22 +1,17 @@
-import { Link as RouterLink, useParams, useSearchParams } from 'react-router-dom';
-import React, { useState } from 'react'
+import { Link as RouterLink } from 'react-router-dom';
+import React from 'react'
 // material
 import { Grid, Button, Container, Stack, Typography, Skeleton, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Slide } from '@mui/material';
 // components
 import Page from '../components/Page';
 import Iconify from '../components/Iconify';
-import { BlogPostCard, BlogPostsSort, BlogPostsSearch } from '../sections/@dashboard/blog';
+import { BlogPostCard } from '../sections/@dashboard/blog';
 // mock
-import POSTS from '../_mock/blog';
 import { useGetFontsDataQuery, useDeleteFontsByIdQuery } from 'src/app/appApi';
 import moment from 'moment'
 // ----------------------------------------------------------------------
 
-const SORT_OPTIONS = [
-  { value: 'latest', label: 'Latest' },
-  { value: 'popular', label: 'Popular' },
-  { value: 'oldest', label: 'Oldest' },
-];
+
 
 // ----------------------------------------------------------------------
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -31,17 +26,17 @@ export default function Blog() {
   })
   const [openDialog, setOpenDialog] = React.useState(false)
   const { data, refetch: GetFontsData, isFetching } = useGetFontsDataQuery()
-  const { isLoading, isSuccess, isError, error } = useDeleteFontsByIdQuery(params)
+  const { isLoading, isError, error, data: DeleteData } = useDeleteFontsByIdQuery(params)
   React.useEffect(() => {
     GetFontsData()
-  }, [])
+  }, []) // eslint-disable-line
   React.useEffect(() => {
-    if (isSuccess) {
+    if (DeleteData) {
       GetFontsData()
       setOpenDialog(false)
 
     }
-  }, [isSuccess])
+  }, [DeleteData]) // eslint-disable-line react-hooks/exhaustive-deps
   return (
     <Page title="Fonts">
       <Container>
@@ -54,10 +49,7 @@ export default function Blog() {
           </Button>
         </Stack>
 
-        <Stack mb={5} direction="row" alignItems="center" justifyContent="space-between">
-          <BlogPostsSearch posts={POSTS} />
-          <BlogPostsSort options={SORT_OPTIONS} />
-        </Stack>
+
 
         {
           isFetching && (
@@ -86,8 +78,9 @@ export default function Blog() {
               imageUrl={post.uploader?.image}
               username={post.uploader?.username || 'Unknowing User'}
               userRole={post.uploader?.role || 'null'}
+              textSample={post?.testText}
             />
-          ))}
+          )).reverse()}
         </Grid>
       </Container>
       <Dialog

@@ -1,14 +1,13 @@
 import * as Yup from 'yup';
 import { useState } from 'react';
 import { useFormik, Form, FormikProvider } from 'formik';
-// material
-import { Stack, TextField, Grid, Button, Container, Alert, Typography } from '@mui/material';
+import { Stack, TextField, Grid, Button, Container, Alert, Typography, InputAdornment, IconButton } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
-// component
 import React from 'react'
 import { useUploadFontMutation } from 'src/app/appApi';
 import Page from './Page';
 import { Link } from 'react-router-dom';
+import Iconify from './Iconify';
 
 // ----------------------------------------------------------------------
 
@@ -16,6 +15,7 @@ export default function UploadFonts() {
 
     const [FontStyles, setFontStyles] = useState([]);
     const [ShowAlert, setShowAlert] = useState(false);
+    const [EditSample, setEditSample] = useState(false)
     const RegisterSchema = Yup.object().shape({
         name: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('name required'),
         testText: Yup.string().min(2, 'Too Short!').max(100, 'Too Long!'),
@@ -74,7 +74,7 @@ export default function UploadFonts() {
         return () => {
             clearTimeout(timeOutAlert)
         }
-    }, [isSuccess, data])
+    }, [isSuccess, data]) // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <>
@@ -132,11 +132,23 @@ export default function UploadFonts() {
 
                                 <TextField
                                     fullWidth
-                                    label="Sample Text"
+                                    label="Sample Text OPTIONAL"
                                     rows={5}
                                     {...getFieldProps('testText')}
                                     error={Boolean(touched.testText && errors.testText)}
                                     helperText={touched.testText && errors.testText}
+                                    icon={<i className="fas fa-font" />}
+                                    InputProps={{
+                                        endAdornment: (
+                                            <InputAdornment position="end">
+                                                <IconButton edge="end" onClick={() => setEditSample((prev) => !prev)}>
+                                                    <Iconify icon={!EditSample ? 'clarity:edit-line' : 'carbon:edit-off'} />
+                                                </IconButton>
+                                            </InputAdornment>
+                                        ),
+                                    }}
+                                    disabled={!EditSample}
+                                    value={EditSample ? formik.values.testText : 'لە ژیانماندا ماری زۆر ھەن لە شێوەی مرۆڤ خودایە بمانپارێزە لە خراپی ژەھریان'}
                                 />
 
                                 <p style={{ color: 'darkred', textAlign: 'center' }}>{isError && error?.data?.error}</p>

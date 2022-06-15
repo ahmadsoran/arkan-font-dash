@@ -7,7 +7,6 @@ import Blog from './pages/Blog';
 import User from './pages/User';
 import Login from './pages/Login';
 import NotFound from './pages/Page404';
-import Products from './pages/Products';
 import DashboardApp from './pages/DashboardApp';
 import { useProfileQuery } from './app/appApi';
 import UploadFonts from './components/UploadFonts';

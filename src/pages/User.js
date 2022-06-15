@@ -78,7 +78,7 @@ export default function User() {
       role: '',
     })
 
-  }, [deleteData, RefetchData, isSuccess])
+  }, [deleteData, RefetchData, isSuccess]) // eslint-disable-line react-hooks/exhaustive-deps
   const handleClose = () => {
     setOpen(false);
   };

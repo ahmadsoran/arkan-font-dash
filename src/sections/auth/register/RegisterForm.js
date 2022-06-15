@@ -1,7 +1,6 @@
 import * as Yup from 'yup';
 import { useState } from 'react';
 import { useFormik, Form, FormikProvider } from 'formik';
-import { useNavigate } from 'react-router-dom';
 // material
 import { Stack, TextField, IconButton, InputAdornment, FormControl, InputLabel, Select, MenuItem, FormHelperText, Grid, Avatar, Button } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
@@ -15,7 +14,6 @@ import React from 'react'
 // ----------------------------------------------------------------------
 
 export default function RegisterForm() {
-  const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = useState(false);
   const [RegisterIntoAccount, { isSuccess, isError, isLoading, error }] = useAddUsersMutation()
@@ -72,7 +70,7 @@ export default function RegisterForm() {
     if (isSuccess) {
       dispatch(setRefetchReducer(!RefetchData))
     }
-  }, [isSuccess])
+  }, [isSuccess]) // eslint-disable-line react-hooks/exhaustive-deps
   return (
     <>
       <Grid

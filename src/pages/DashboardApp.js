@@ -1,11 +1,9 @@
-import { faker } from '@faker-js/faker';
-// @mui
+
 import { useTheme } from '@mui/material/styles';
-import { Grid, Container, Typography, Box, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Paper, Button } from '@mui/material';
+import { Grid, Container, Typography, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Paper, Button } from '@mui/material';
 // components
 import Page from '../components/Page';
-import Iconify from '../components/Iconify';
-// sections
+
 import {
 
   AppCurrentVisits,
@@ -36,8 +34,8 @@ export default function DashboardApp() {
     if (DownloadsData) {
       // get sum off all downloads
       let sum = 0;
-      DownloadsData.map(item => {
-        sum += item.DownloadedTimes
+      DownloadsData?.map(item => {
+        return sum += item.DownloadedTimes
       })
       setAllDownloads(sum)
       setAllFonts(DownloadsData?.length)

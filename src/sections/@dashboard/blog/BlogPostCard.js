@@ -31,6 +31,12 @@ function BlogPostCard(props) {
             </Box>
           </Grid>
 
+          <Box py={2}>
+            <Typography variant="body1" textAlign='center' color='success'>
+              {props.textSample}
+            </Typography>
+          </Box>
+
           <Grid mt={2} display='flex'>
             <Avatar src={props.imageUrl} sx={{ width: 30, height: 30, mx: 1, mt: 1 }} />
             <div>

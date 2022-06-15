@@ -19,7 +19,7 @@ export default function App() {
       return navigate('/login')
     }
 
-  }, [])
+  }, []) // eslint-disable-line
 
   return (
     <ThemeProvider>
