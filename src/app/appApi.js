@@ -1,20 +1,14 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 // Define a service using a base URL and expected endpoints
-const ServerUrl = 'http://localhost:5000'
-// const ServerUrl = 'https://arkanback.herokuapp.com'
+// const ServerUrl = 'http://localhost:5000'
+const ServerUrl = 'https://arkanback.vercel.app'
 export const appApi = createApi({
     reducerPath: 'appApi',
     baseQuery: fetchBaseQuery({
         baseUrl: ServerUrl,
         prepareHeaders: (headers, { getState }) => {
             const { token } = getState().tokenSlice
-
-            headers.set('Access-Control-Allow-Origin', '*')
-            headers.set('Access-Control-Allow-Credentials', 'true')
-            headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
-            headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With')
-
 
             if (token) {
                 headers.set('authorization', token)
