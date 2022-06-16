@@ -42,7 +42,9 @@ export default function DashboardApp() {
     }
   }, [DownloadsData])
   const sortedArray = []
+  let sumVisitors = 0;
   const sortedByVisits = getVisitors?.map(item => {
+    sumVisitors += item.visits
     return {
       label: item.location,
       value: item.visits,
@@ -70,7 +72,7 @@ export default function DashboardApp() {
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="Visits" total={getVisitors?.length ? getVisitors?.length : 0} color="info" icon={<VisibilityIcon width={24} height={24} />} />
+            <AppWidgetSummary title="Visits" total={sumVisitors} color="info" icon={<VisibilityIcon width={24} height={24} />} />
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
             <AppWidgetSummary title="Downloads" total={AllDownloads} color="success" icon={<DownloadTwoToneIcon width={24} height={24} />} />
