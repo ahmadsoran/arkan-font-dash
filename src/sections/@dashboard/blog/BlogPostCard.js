@@ -17,7 +17,7 @@ function BlogPostCard(props) {
             <Box>
               <FontDownloadTwoToneIcon color='warning' fontSize="large" />
               <br />
-              <Typography textAlign='center' variant="body1"  >
+              <Typography sx={props.fontnameStyle} textAlign='center' variant="body1"  >
                 {props.fonts}
               </Typography>
             </Box>
@@ -32,7 +32,7 @@ function BlogPostCard(props) {
           </Grid>
 
           <Box py={2}>
-            <Typography variant="body1" textAlign='center' color='success'>
+            <Typography sx={props.sampleStyle} variant="body1" textAlign='center' color='success'>
               {props.textSample}
             </Typography>
           </Box>

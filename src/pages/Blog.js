@@ -17,6 +17,15 @@ import moment from 'moment'
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
+async function loadFonts(fontname, fontUrl) {
+  const font = new FontFace(fontname, `url(${fontUrl})`);
+  // wait for font to be loaded
+  await font.load();
+  // add font to document
+  document.fonts.add(font);
+  // enable font with CSS class
+  console.log(font + 'loaded')
+}
 
 export default function Blog() {
   const [params, setParams] = React.useState()
@@ -37,6 +46,7 @@ export default function Blog() {
 
     }
   }, [DeleteData]) // eslint-disable-line react-hooks/exhaustive-deps
+  console.log(data)
   return (
     <Page title="Fonts">
       <Container>
@@ -61,26 +71,33 @@ export default function Blog() {
           )
         }
         <Grid container spacing={3}>
-          {data && data?.map((post, index) => (
-            <BlogPostCard
-              key={index}
-              title={post.name}
-              onClick={() => {
-                setOpenDialog(!openDialog)
-                setID({
-                  id: post._id,
-                  title: post.name,
-                })
-              }}
-              date={moment(post.uploadDate).fromNow()}
-              fonts={post.styles.length + 1}
-              downloads={post.DownloadedTimes}
-              imageUrl={post.uploader?.image}
-              username={post.uploader?.username || 'Unknowing User'}
-              userRole={post.uploader?.role || 'null'}
-              textSample={post?.testText}
-            />
-          )).reverse()}
+          {data && data?.map((post, index) => {
+            loadFonts(post.name, post.regular)
+            { console.log(post.regular) }
+            return (
+              <BlogPostCard
+                key={index}
+                title={post.name}
+                onClick={() => {
+                  setOpenDialog(!openDialog)
+                  setID({
+                    id: post._id,
+                    title: post.name,
+                  })
+                }}
+                date={moment(post.uploadDate).fromNow()}
+                fonts={post.styles.length + 1}
+                downloads={post.DownloadedTimes}
+                imageUrl={post.uploader?.image}
+                username={post.uploader?.username || 'Unknowing User'}
+                userRole={post.uploader?.role || 'null'}
+                textSample={post?.testText}
+                sampleStyle={{ fontFamily: post.name }}
+                fontnameStyle={{ fontFamily: post.name }}
+              />
+            )
+
+          }).reverse()}
         </Grid>
       </Container>
       <Dialog
