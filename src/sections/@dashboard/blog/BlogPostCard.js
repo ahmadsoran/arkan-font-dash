@@ -17,10 +17,10 @@ function BlogPostCard(props) {
       }}>
         <Box>
 
-          <IconButton sx={{ position: 'absolute', top: 0, right: 0 }} color='error' onClick={props.onClick}>
+          <IconButton sx={{ position: 'absolute', top: 0, right: 0 }} color='error' onClick={props.onclick}>
             <DeleteForeverTwoToneIcon color='error' />
           </IconButton>
-          <CardHeader sx={props.fontnameStyle} title={props.title} subheader={props.date} />
+          <CardHeader sx={props.fontnamestyle} title={props.title} subheader={props.date} />
           <CardContent>
             <Grid display='flex' justifyContent='space-evenly' >
               <Box>
@@ -41,21 +41,21 @@ function BlogPostCard(props) {
             </Grid>
 
             <Box py={2}>
-              <Typography sx={props.sampleStyle} variant="body1" textAlign='center' color='success'>
-                {props.textSample}
+              <Typography sx={props.samplestyle} variant="body1" textAlign='center' color='success'>
+                {props.textsample}
               </Typography>
             </Box>
 
           </CardContent>
         </Box>
         <Grid m={2} display='flex'>
-          <Avatar src={props.imageUrl} sx={{ width: 30, height: 30, mx: 1, mt: 1 }} />
+          <Avatar src={props.imageurl} sx={{ width: 30, height: 30, mx: 1, mt: 1 }} />
           <div>
             <Typography variant="body1" color="textSecondary" component="h6">
               {props.username}
             </Typography>
             <Typography variant="caption" color="textSecondary" component="p">
-              {props.userRole}
+              {props.userrole}
             </Typography>
           </div>
         </Grid>

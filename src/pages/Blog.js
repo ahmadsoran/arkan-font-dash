@@ -76,7 +76,7 @@ export default function Blog() {
               <BlogPostCard
                 key={index}
                 title={`${post?.name?.english} | ${post?.name?.kurdish}`}
-                onClick={() => {
+                onclick={() => {
                   setOpenDialog(!openDialog)
                   setID({
                     id: post?._id,
@@ -86,12 +86,12 @@ export default function Blog() {
                 date={moment(post?.uploadDate).fromNow()}
                 fonts={post?.styles?.length + 1}
                 downloads={post?.DownloadedTimes}
-                imageUrl={post.uploader?.image}
+                imageurl={post.uploader?.image}
                 username={post.uploader?.username || 'Unknowing User'}
-                userRole={post.uploader?.role || 'null'}
-                textSample={post?.testText}
-                sampleStyle={{ fontFamily: post?.name?.english, fontSize: 30 }}
-                fontnameStyle={{ fontFamily: post?.name?.english }}
+                userrole={post.uploader?.role || 'null'}
+                textsample={post?.testText}
+                samplestyle={{ fontFamily: post?.name?.english, fontSize: 30 }}
+                fontnamestyle={{ fontFamily: post?.name?.english }}
               />
             )
 
