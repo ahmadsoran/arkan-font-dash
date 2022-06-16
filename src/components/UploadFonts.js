@@ -17,14 +17,16 @@ export default function UploadFonts() {
     const [ShowAlert, setShowAlert] = useState(false);
     const [EditSample, setEditSample] = useState(false)
     const RegisterSchema = Yup.object().shape({
-        name: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('name required'),
+        KUname: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('kurdish font name required'),
+        ENname: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('english font name required'),
         testText: Yup.string().min(2, 'Too Short!').max(100, 'Too Long!'),
     });
     const [UploadFont, { isError, isLoading, error, data, isSuccess }] = useUploadFontMutation()
 
     const formik = useFormik({
         initialValues: {
-            name: '',
+            KUname: '',
+            ENname: '',
             testText: '',
             regularPath: '',
             regularName: '',
@@ -34,7 +36,8 @@ export default function UploadFonts() {
         validationSchema: RegisterSchema,
         onSubmit: () => {
             const formData = new FormData();
-            formData.append('name', formik.values.name);
+            formData.append('KUname', formik.values.KUname);
+            formData.append('ENname', formik.values.ENname);
             formik.values.testText && formData.append('testText', formik.values.testText);
             formData.append('regular', formik.values.regularPath);
             FontStyles?.forEach(font => {
@@ -60,6 +63,7 @@ export default function UploadFonts() {
         }])
 
     };
+
     React.useEffect(() => {
         if (isSuccess) {
             setFontStyles([])
@@ -74,7 +78,7 @@ export default function UploadFonts() {
         return () => {
             clearTimeout(timeOutAlert)
         }
-    }, [isSuccess, data]) // eslint-disable-line react-hooks/exhaustive-deps
+    }, [isSuccess, data]) // eslint-disable-line 
 
     return (
         <>
@@ -124,10 +128,17 @@ export default function UploadFonts() {
 
                                 <TextField
                                     fullWidth
-                                    label="Font Name"
-                                    {...getFieldProps('name')}
-                                    error={Boolean(touched.name && errors.name)}
-                                    helperText={touched.name && errors.name}
+                                    label="KU Font Name"
+                                    {...getFieldProps('KUname')}
+                                    error={Boolean(touched.KUname && errors.KUname)}
+                                    helperText={touched.KUname && errors.KUname}
+                                />
+                                <TextField
+                                    fullWidth
+                                    label="EN Font Name"
+                                    {...getFieldProps('ENname')}
+                                    error={Boolean(touched.ENname && errors.ENname)}
+                                    helperText={touched.ENname && errors.ENname}
                                 />
 
                                 <TextField

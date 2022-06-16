@@ -46,7 +46,6 @@ export default function Blog() {
 
     }
   }, [DeleteData]) // eslint-disable-line react-hooks/exhaustive-deps
-  console.log(data)
   return (
     <Page title="Fonts">
       <Container>
@@ -70,29 +69,28 @@ export default function Blog() {
             </>
           )
         }
-        <Grid container spacing={3}>
+        <Grid container spacing={3} >
           {data && data?.map((post, index) => {
             loadFonts(post.name, post.regular)
-            { console.log(post.regular) }
             return (
               <BlogPostCard
                 key={index}
-                title={post.name}
+                title={`${post?.name?.english} | ${post?.name?.kurdish}`}
                 onClick={() => {
                   setOpenDialog(!openDialog)
                   setID({
-                    id: post._id,
-                    title: post.name,
+                    id: post?._id,
+                    title: post?.name?.english,
                   })
                 }}
-                date={moment(post.uploadDate).fromNow()}
-                fonts={post.styles.length + 1}
-                downloads={post.DownloadedTimes}
+                date={moment(post?.uploadDate).fromNow()}
+                fonts={post?.styles?.length + 1}
+                downloads={post?.DownloadedTimes}
                 imageUrl={post.uploader?.image}
                 username={post.uploader?.username || 'Unknowing User'}
                 userRole={post.uploader?.role || 'null'}
                 textSample={post?.testText}
-                sampleStyle={{ fontFamily: post.name }}
+                sampleStyle={{ fontFamily: post.name, fontSize: 30 }}
                 fontnameStyle={{ fontFamily: post.name }}
               />
             )
