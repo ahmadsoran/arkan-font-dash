@@ -15,6 +15,13 @@ export const appApi = createApi({
             }
             return headers
         },
+        cache: 'default',
+        credentials: 'include',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+        },
+
 
     }),
 
