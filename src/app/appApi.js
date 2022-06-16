@@ -1,8 +1,8 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 // Define a service using a base URL and expected endpoints
-const ServerUrl = 'http://localhost:5000'
 // const ServerUrl = 'http://localhost:5000'
+const ServerUrl = 'https://arkanback.vercel.app'
 export const appApi = createApi({
     reducerPath: 'appApi',
     baseQuery: fetchBaseQuery({
