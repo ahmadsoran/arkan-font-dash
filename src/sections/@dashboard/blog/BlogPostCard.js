@@ -20,7 +20,7 @@ function BlogPostCard(props) {
           <IconButton sx={{ position: 'absolute', top: 0, right: 0 }} color='error' onClick={props.onclick}>
             <DeleteForeverTwoToneIcon color='error' />
           </IconButton>
-          <CardHeader sx={props.fontnamestyle} title={props.title} subheader={props.date} />
+          <CardHeader sx={props.titleStyle} title={props.title} subheader={props.date} />
           <CardContent>
             <Grid display='flex' justifyContent='space-evenly' >
               <Box>

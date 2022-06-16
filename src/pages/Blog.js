@@ -46,6 +46,14 @@ export default function Blog() {
 
     }
   }, [DeleteData]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  React.useEffect(() => {
+    if (data) {
+      data?.forEach((post) => {
+        loadFonts(post?.name?.english, post?.regular)
+      })
+    }
+  }, [data]) // eslint-disable-line react-hooks/exhaustive-deps
   return (
     <Page title="Fonts">
       <Container>
@@ -71,11 +79,16 @@ export default function Blog() {
         }
         <Grid container spacing={3} >
           {data && data?.map((post, index) => {
-            loadFonts(post?.name?.english, post?.regular)
             return (
               <BlogPostCard
                 key={index}
-                title={`${post?.name?.english} | ${post?.name?.kurdish}`}
+                title={
+                  <Typography
+                    fontFamily={`${post?.name?.english}`}
+                    variant="h6" >
+                    {post?.name?.english} | {post?.name?.kurdish}
+                  </Typography>
+                }
                 onclick={() => {
                   setOpenDialog(!openDialog)
                   setID({
@@ -91,7 +104,7 @@ export default function Blog() {
                 userrole={post.uploader?.role || 'null'}
                 textsample={post?.testText}
                 samplestyle={{ fontFamily: post?.name?.english, fontSize: 30 }}
-                fontnamestyle={{ fontFamily: post?.name?.english }}
+
               />
             )
 
