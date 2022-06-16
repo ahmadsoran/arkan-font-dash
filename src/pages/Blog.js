@@ -71,7 +71,7 @@ export default function Blog() {
         }
         <Grid container spacing={3} >
           {data && data?.map((post, index) => {
-            loadFonts(post.name, post.regular)
+            loadFonts(post?.name?.english, post?.regular)
             return (
               <BlogPostCard
                 key={index}
@@ -90,8 +90,8 @@ export default function Blog() {
                 username={post.uploader?.username || 'Unknowing User'}
                 userRole={post.uploader?.role || 'null'}
                 textSample={post?.testText}
-                sampleStyle={{ fontFamily: post.name, fontSize: 30 }}
-                fontnameStyle={{ fontFamily: post.name }}
+                sampleStyle={{ fontFamily: post?.name?.english, fontSize: 30 }}
+                fontnameStyle={{ fontFamily: post?.name?.english }}
               />
             )
 
