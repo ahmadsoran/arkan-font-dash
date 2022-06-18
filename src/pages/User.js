@@ -1,5 +1,5 @@
 
-import { Link, } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 // material
 import {
   Table,
@@ -239,6 +239,8 @@ export default function User() {
         </Alert>
       )
     }
+  } else {
+    return <h1>invaild token please login again</h1>
   }
 
 }

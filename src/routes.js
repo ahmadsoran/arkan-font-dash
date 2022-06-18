@@ -1,4 +1,4 @@
-import { Navigate, useRoutes } from 'react-router-dom';
+import { Navigate, useNavigate, useRoutes } from 'react-router-dom';
 // layouts
 import DashboardLayout from './layouts/dashboard';
 import LogoOnlyLayout from './layouts/LogoOnlyLayout';
@@ -9,10 +9,23 @@ import Login from './pages/Login';
 import NotFound from './pages/Page404';
 import DashboardApp from './pages/DashboardApp';
 import UploadFonts from './components/UploadFonts';
+import { useDispatch } from 'react-redux';
+import { removeToken } from './feature/tokenSlice';
+import { useProfileQuery } from './app/appApi';
+import { useEffect } from 'react';
 
 // ----------------------------------------------------------------------
 
 export default function Router() {
+  const { error } = useProfileQuery()
+  const navigate = useNavigate();
+  const dispatch = useDispatch()
+  useEffect(() => {
+    if (error?.data?.error === 'invalid token') {
+      dispatch(removeToken())
+      navigate('/login')
+    }
+  }, [error]) // eslint-disable-line react-hooks/exhaustive-deps
   return useRoutes([
     {
 
