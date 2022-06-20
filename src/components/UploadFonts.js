@@ -1,7 +1,7 @@
 import * as Yup from 'yup';
 import { useState } from 'react';
 import { useFormik, Form, FormikProvider } from 'formik';
-import { Stack, TextField, Grid, Button, Container, Alert, Typography, InputAdornment, IconButton } from '@mui/material';
+import { Stack, TextField, Grid, Button, Container, Alert, Typography, InputAdornment, IconButton, FormControl, InputLabel, Select, MenuItem, Checkbox, ListItemText, OutlinedInput } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import React from 'react'
 import { useUploadFontMutation } from 'src/app/appApi';
@@ -10,11 +10,41 @@ import { Link } from 'react-router-dom';
 import Iconify from './Iconify';
 
 // ----------------------------------------------------------------------
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+    PaperProps: {
+        style: {
+            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+            width: 250,
+        },
+    },
+};
+
+const catagory = [
+    'فۆنتی کەناڵ و کۆمپانیاکان',
+    'فۆنتی منداڵانە',
+    'فۆنتی سادە',
+    'فۆنتی دەستنووس',
+    'فۆنتی ڕوقعە',
+    'فۆنتی ثولث',
+    'فۆنتی دیوانی',
+    'فۆنتی نەسخ',
+    'فۆنتی کوفی',
+    'فۆنتی ئازاد',
+    'فۆنتی نەستەعلیق',
+    'فۆنتی ناونیشان',
+    'فۆنتی زەخرەفە و ڕازاوە',
+    'فۆنتەکانی حەسەن',
+    'فۆنتەکانی GE',
+    'فۆنتەکانی دیما',
+]
 
 export default function UploadFonts() {
 
     const [FontStyles, setFontStyles] = useState([]);
     const [ShowAlert, setShowAlert] = useState(false);
+    const [Catagory, setCatagory] = React.useState([]);
     const [EditSample, setEditSample] = useState(false)
     const RegisterSchema = Yup.object().shape({
         KUname: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('kurdish font name required'),
@@ -43,7 +73,9 @@ export default function UploadFonts() {
             FontStyles?.forEach(font => {
                 formData.append('styles', font.file);
             })
-
+            Catagory?.forEach(cat => {
+                formData.append('category', cat);
+            })
             UploadFont(formData).unwrap()
 
         },
@@ -80,6 +112,17 @@ export default function UploadFonts() {
         }
     }, [isSuccess, data]) // eslint-disable-line 
 
+    const handleChangeCatagory = (event) => {
+        const {
+            target: { value },
+        } = event;
+        setCatagory(
+            // On autofill we get a stringified value.
+            typeof value === 'string' ? value.split(',') : value,
+        );
+
+    };
+    console.log(Catagory)
     return (
         <>
             <Page title="Font Upload">
@@ -161,6 +204,34 @@ export default function UploadFonts() {
                                     disabled={!EditSample}
                                     value={EditSample ? formik.values.testText : 'لە ژیانماندا ماری زۆر ھەن لە شێوەی مرۆڤ خودایە بمانپارێزە لە خراپی ژەھریان'}
                                 />
+
+                                <FormControl sx={{ m: 1 }}>
+                                    <InputLabel id="demo-multiple-checkbox-label" style={{
+                                        backgroundColor: '#5c94ccff',
+                                        overflow: 'hidden',
+                                        zIndex: '10',
+                                        padding: '2px',
+                                        borderRadius: '5px',
+                                        color: '#fff',
+                                    }}>Catagories</InputLabel>
+                                    <Select
+                                        labelId="demo-multiple-checkbox-label"
+                                        id="demo-multiple-checkbox"
+                                        multiple
+                                        value={Catagory}
+                                        onChange={handleChangeCatagory}
+                                        input={<OutlinedInput label="Tag" />}
+                                        renderValue={(selected) => selected.join(', ')}
+                                        MenuProps={MenuProps}
+                                    >
+                                        {catagory.map((name) => (
+                                            <MenuItem key={name} value={name}>
+                                                <Checkbox checked={Catagory.indexOf(name) > -1} />
+                                                <ListItemText primary={name} />
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
 
                                 <p style={{ color: 'darkred', textAlign: 'center' }}>{isError && error?.data?.error}</p>
                                 {
