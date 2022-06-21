@@ -84,6 +84,15 @@ export const appApi = createApi({
 
             })
         }),
+        updateFont: builder.mutation({
+            query: (FontData) => ({
+                url: "/updateFont",
+                method: "POST",
+                body: FontData,
+                credentials: 'include',
+
+            })
+        }),
         getFontsData: builder.query({
             query: () => ({
                 url: "/getFonts",
@@ -129,5 +138,6 @@ export const {
     useVisitsQuery,
     useGetBugsQuery,
     useGetLogsQuery,
+    useUpdateFontMutation,
 
 } = appApi

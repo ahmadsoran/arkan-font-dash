@@ -7,8 +7,9 @@ import Page from '../components/Page';
 import Iconify from '../components/Iconify';
 import { BlogPostCard } from '../sections/@dashboard/blog';
 // mock
-import { useGetFontsDataQuery, useDeleteFontsByIdQuery } from 'src/app/appApi';
+import { useGetFontsDataQuery, useDeleteFontsByIdQuery, useUpdateFontMutation } from 'src/app/appApi';
 import moment from 'moment'
+import { useSelector } from 'react-redux';
 // ----------------------------------------------------------------------
 
 
@@ -36,6 +37,12 @@ export default function Blog() {
   const [openDialog, setOpenDialog] = React.useState(false)
   const { data, refetch: GetFontsData, isFetching } = useGetFontsDataQuery()
   const { isLoading, isError, error, data: DeleteData } = useDeleteFontsByIdQuery(params)
+  const [UpdateFontID, { isLoading: isLoadingDelete, isError: isErrorDelete, error: errorDelete, isSuccess: isSuccessDelete }] = useUpdateFontMutation()
+  const [deleteFont, setDeleteFont] = React.useState({
+    id: '',
+    active: false,
+  })
+  const [SaveFontData, setSaveFontData] = React.useState(false)
   React.useEffect(() => {
     GetFontsData()
   }, []) // eslint-disable-line
@@ -54,6 +61,27 @@ export default function Blog() {
       })
     }
   }, [data]) // eslint-disable-line react-hooks/exhaustive-deps
+  React.useEffect(() => {
+    if (isSuccessDelete) {
+      GetFontsData()
+      setDeleteFont({})
+      setSaveFontData(false)
+
+    }
+  }, [isSuccessDelete]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  const KUnameSelector = useSelector(state => state.EditFontInputSlice.KUname)
+  const ENnameSelector = useSelector(state => state.EditFontInputSlice.ENname)
+  const testTextSelector = useSelector(state => state.EditFontInputSlice.testText)
+  React.useEffect(() => {
+    if (KUnameSelector || ENnameSelector || testTextSelector) {
+      setSaveFontData(true)
+    } else {
+      setSaveFontData(false)
+
+    }
+  }, [testTextSelector, KUnameSelector, ENnameSelector]) // eslint-disable-line react-hooks/exhaustive-deps
+
   return (
     <Page title="Fonts">
       <Container>
@@ -104,7 +132,26 @@ export default function Blog() {
                 userrole={post.uploader?.role || 'null'}
                 textsample={post?.testText}
                 samplestyle={{ fontFamily: post?.name?.english, fontSize: 30 }}
-
+                editcolor={deleteFont.id === post?._id ? 'success' : 'disabled'}
+                editmode={deleteFont.id === post?._id ? true : false}
+                editdisable={isLoadingDelete}
+                editclick={() => {
+                  SaveFontData ?
+                    UpdateFontID({
+                      KUname: KUnameSelector,
+                      ENname: ENnameSelector,
+                      description: testTextSelector,
+                      fontId: deleteFont.id
+                    })
+                    : setDeleteFont({
+                      id: deleteFont.id === post?._id && deleteFont.id ? '' : post?._id,
+                      active: !deleteFont.active,
+                      title: deleteFont.id === post?._id && deleteFont.id ? '' : post?.name?.english,
+                    })
+                }}
+                save={deleteFont.id === post?._id && SaveFontData ? true : false}
+                iserr={deleteFont.id === post?._id && isErrorDelete}
+                errmsg={errorDelete?.data?.error || 'unknown error happen'}
               />
             )
 
@@ -138,6 +185,7 @@ export default function Blog() {
           </DialogActions>
         }
       </Dialog>
+
     </Page>
   );
 }

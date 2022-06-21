@@ -21,7 +21,7 @@ const MenuProps = {
     },
 };
 
-const catagory = [
+export const catagory = [
     'فۆنتی کەناڵ و کۆمپانیاکان',
     'فۆنتی منداڵانە',
     'فۆنتی سادە',
@@ -122,7 +122,6 @@ export default function UploadFonts() {
         );
 
     };
-    console.log(Catagory)
     return (
         <>
             <Page title="Font Upload">
