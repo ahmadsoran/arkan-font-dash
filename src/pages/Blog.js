@@ -64,7 +64,10 @@ export default function Blog() {
   React.useEffect(() => {
     if (isSuccessDelete) {
       GetFontsData()
-      setDeleteFont({})
+      setDeleteFont({
+        id: '',
+        active: false,
+      })
       setSaveFontData(false)
 
     }
