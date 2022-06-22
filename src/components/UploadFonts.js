@@ -8,7 +8,8 @@ import { useUploadFontMutation } from 'src/app/appApi';
 import Page from './Page';
 import { Link } from 'react-router-dom';
 import Iconify from './Iconify';
-
+import { Box } from '@mui/system';
+import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 // ----------------------------------------------------------------------
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -71,7 +72,7 @@ export default function UploadFonts() {
             formik.values.testText && formData.append('testText', formik.values.testText);
             formData.append('regular', formik.values.regularPath);
             FontStyles?.forEach(font => {
-                formData.append('styles', font.file);
+                formData.append('styles', font);
             })
             Catagory?.forEach(cat => {
                 formData.append('category', cat);
@@ -88,11 +89,9 @@ export default function UploadFonts() {
 
     };
     const handleStylesFileChange = (e) => {
-        const styles = e.target.files[0];
-        setFontStyles([...FontStyles, {
-            name: styles?.name,
-            file: styles,
-        }])
+        const styles = e.target.files;
+        setFontStyles([...styles])
+
 
     };
 
@@ -122,6 +121,7 @@ export default function UploadFonts() {
         );
 
     };
+
     return (
         <>
             <Page title="Font Upload">
@@ -147,11 +147,18 @@ export default function UploadFonts() {
                                 <Grid container display={'flex'} >
 
                                     {
-                                        FontStyles?.map((item, index) => {
+                                        FontStyles && FontStyles?.map((item, index) => {
                                             return (
-                                                <Button key={index} sx={{ m: 1, position: 'relative', width: 'fit-content', py: 4, backgroundColor: '#3a96ff3b' }}>
+                                                <Box key={index} sx={{ m: 1, position: 'relative', width: 'fit-content', p: 4, borderRadius: 2, backgroundColor: '#3a96ff3b' }}>
+                                                    <IconButton color='error' sx={{ position: 'absolute', top: 0, right: 0 }} onClick={(e) => {
+                                                        const filteredFonts = FontStyles.filter((_, i) => i != index)
+                                                        setFontStyles(filteredFonts)
+
+                                                    }}>
+                                                        <RemoveCircleIcon color='error' />
+                                                    </IconButton>
                                                     {item.name}
-                                                </Button>
+                                                </Box>
                                             )
                                         })
 
@@ -161,7 +168,7 @@ export default function UploadFonts() {
                                         +
 
                                         <label style={{ position: 'absolute', width: '100%', height: '100%' }} htmlFor="styleFiles">
-                                            <input onChange={handleStylesFileChange} type="file" id="styleFiles" style={{ display: 'none' }} />
+                                            <input onChange={handleStylesFileChange} type="file" multiple="multiple" id="styleFiles" style={{ display: 'none' }} />
                                         </label>
 
                                     </Button>
